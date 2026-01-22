@@ -90,25 +90,8 @@ h1 {
     color: #a39876;
 }
 
-/* fade older ones out gradually - kinda lazy way to do it but works */
-.definition:nth-child(1) { opacity: 1; }
-.definition:nth-child(2) { opacity: 0.95; }
-.definition:nth-child(3) { opacity: 0.90; }
-.definition:nth-child(4) { opacity: 0.85; }
-.definition:nth-child(5) { opacity: 0.80; }
-.definition:nth-child(6) { opacity: 0.75; }
-.definition:nth-child(7) { opacity: 0.70; }
-.definition:nth-child(8) { opacity: 0.65; }
-.definition:nth-child(9) { opacity: 0.60; }
-.definition:nth-child(10) { opacity: 0.55; }
-.definition:nth-child(11) { opacity: 0.50; }
-.definition:nth-child(12) { opacity: 0.45; }
-.definition:nth-child(13) { opacity: 0.40; }
-.definition:nth-child(14) { opacity: 0.35; }
-.definition:nth-child(15) { opacity: 0.30; }
-.definition:nth-child(16) { opacity: 0.25; }
-.definition:nth-child(17) { opacity: 0.20; }
-.definition:nth-child(18) { opacity: 0.18; }
+/* all definitions same opacity */
+.definition { opacity: 1; }
 
 .end-message {
     margin-top: 3rem;
