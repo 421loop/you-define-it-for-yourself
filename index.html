@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sonic Patching & Gardening</title>
+    <style>
+        /* basic reset stuff */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Georgia, 'Times New Roman', serif;
+            background-color: #2d2416; /* dark bg */
+            color: #a39876; /* light greenish text */
+            min-height: 100vh;
+            display: flex;
+            overflow: hidden;
+        }
+
+        /* left column with the title */
+        .left-side {
+            width: 35%;
+            min-width: 300px;
+            padding: 4rem 3rem;
+            position: fixed;
+            left: 0;
+            top: 0;
+            height: 100vh;
+        }
+
+        .title-link {
+            text-decoration: none;
+            color: inherit;
+            cursor: pointer;
+            display: block;
+            transition: all 0.3s ease;
+        }
+
+        /* little hover effect */
+        .title-link:hover h1 {
+            transform: scale(1.02);
+        }
+
+        h1 {
+            font-size: clamp(2.5rem, 5vw, 4rem); /* responsive sizing */
+            font-weight: bold;
+            line-height: 1.1;
+            color: #a39876;
+            transition: transform 0.3s ease;
+            text-decoration: underline;
+            text-decoration-color: #a39876;
+            text-underline-offset: 8px;
+            text-decoration-thickness: 2px;
+        }
+
+        /* ampersand same color as everything else now */
+        .ampersand {
+            color: #a39876;
+        }
+
+        .hint {
+            margin-top: 1.5rem;
+            font-size: 0.9rem;
+            color: #8a7d61;
+            font-style: italic;
+        }
+
+        /* right side where definitions appear */
+        .right-side {
+            width: 65%;
+            margin-left: 35%; /* pushes it over */
+            padding: 4rem 3rem 4rem 4rem;
+            overflow-y: auto;
+            height: 100vh;
+        }
+
+        .definitions-container {
+            max-width: 50rem;
+            width: 100%;
+        }
+
+        /* each definition block */
+        .definition {
+            margin-bottom: 2.5rem;
+            opacity: 0;
+            transform: translateY(20px);
+            animation: fadeIn 0.7s ease-in-out forwards;
+        }
+
+        .definition p {
+            font-size: clamp(1.2rem, 2vw, 1.8rem);
+            line-height: 1.6;
+            color: #a39876;
+        }
+
+        /* fade older ones out gradually - kinda lazy way to do it but works */
+        .definition:nth-child(1) { opacity: 1; }
+        .definition:nth-child(2) { opacity: 0.95; }
+        .definition:nth-child(3) { opacity: 0.90; }
+        .definition:nth-child(4) { opacity: 0.85; }
+        .definition:nth-child(5) { opacity: 0.80; }
+        .definition:nth-child(6) { opacity: 0.75; }
+        .definition:nth-child(7) { opacity: 0.70; }
+        .definition:nth-child(8) { opacity: 0.65; }
+        .definition:nth-child(9) { opacity: 0.60; }
+        .definition:nth-child(10) { opacity: 0.55; }
+        .definition:nth-child(11) { opacity: 0.50; }
+        .definition:nth-child(12) { opacity: 0.45; }
+        .definition:nth-child(13) { opacity: 0.40; }
+        .definition:nth-child(14) { opacity: 0.35; }
+        .definition:nth-child(15) { opacity: 0.30; }
+        .definition:nth-child(16) { opacity: 0.25; }
+        .definition:nth-child(17) { opacity: 0.20; }
+        .definition:nth-child(18) { opacity: 0.18; }
+
+        .end-message {
+            margin-top: 3rem;
+            text-align: left;
+            font-size: 1.2rem;
+            font-style: italic;
+            color: #a39876;
+            opacity: 0.5;
+        }
+
+        /* fade in animation */
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: inherit;
+                transform: translateY(0);
+            }
+        }
+
+        /* mobile - just stack everything */
+        @media (max-width: 768px) {
+            body {
+                flex-direction: column;
+                overflow: auto;
+            }
+            
+            .left-side {
+                width: 100%;
+                min-width: auto;
+                position: relative;
+                height: auto;
+                padding: 2rem;
+            }
+
+            .right-side {
+                width: 100%;
+                margin-left: 0;
+                height: auto;
+                padding: 2rem;
+            }
+
+            h1 {
+                font-size: 2.5rem;
+            }
+
+            .definition p {
+                font-size: 1.2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- left column -->
+    <div class="left-side">
+        <a href="#" class="title-link" id="titleLink">
+            <h1>
+                SONIC<br>
+                PATCHING<br>
+                <span class="ampersand">&</span><br>
+                GARDENING
+            </h1>
+            <div class="hint" id="hint">(click to reveal)</div>
+        </a>
+    </div>
+
+    <!-- right column where stuff appears -->
+    <div class="right-side">
+        <div class="definitions-container" id="definitionsContainer">
+            <!-- definitions get added here when you click -->
+        </div>
+    </div>
+
+    <script>
+        // all the text that shows up
+        const definitions = [
+            "your sonic archive grows with you",
+            "we design for linking of sounds",
+            "tending to make space for more connections and listening",
+            "gardening is not about nostalgia, it is an act of exercising user power and agency",
+            "the visuals follow the listening",
+            "we do not collapse everything into one format",
+            "not sealed vaults, but places with built-in architecture for revisiting, re-hearing and re-contextualizing of personal knowledge (idk about this one)",
+            "chronological order can be useful but shouldn't be constraining",
+            "it is important to distinguish between 'my' and 'me'",
+            "context and metadata matter; where was the sound captured, how was it heard, what tools were used, anything else that matters for your personal associations",
+            "annotations are essential",
+            "making and unmaking is a design principle",
+            "require and facilitate re-listening",
+            "help us design for slowness",
+            "mixed media is expected and designed for", 
+            "is for you to define for yourself"
+        ];
+
+        let clickCount = 0; // keeps track of how many times clicked
+        const container = document.getElementById('definitionsContainer');
+        const titleLink = document.getElementById('titleLink');
+        const hint = document.getElementById('hint');
+
+        // when you click the title
+        titleLink.addEventListener('click', function(e) {
+            e.preventDefault(); // stops the link from doing normal link stuff
+            
+            // only add more if there's still definitions left
+            if (clickCount < definitions.length) {
+                // make a new div
+                const defDiv = document.createElement('div');
+                defDiv.className = 'definition';
+                defDiv.innerHTML = '<p>' + definitions[clickCount] + '</p>';
+                container.appendChild(defDiv);
+                
+                clickCount++;
+
+                // hide the hint and show end message when done
+                if (clickCount === definitions.length) {
+                    hint.style.display = 'none';
+                    const endMsg = document.createElement('div');
+                    endMsg.className = 'end-message';
+                    endMsg.textContent = '(end of definitions)';
+                    container.appendChild(endMsg);
+                }
+            }
+        });
+    </script>
+</body>
+</html>
