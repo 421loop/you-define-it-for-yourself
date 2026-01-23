@@ -25,6 +25,33 @@ let clickCount = 0;
 const container = document.getElementById('definitionsContainer');
 const titleLink = document.getElementById('titleLink');
 const hint = document.getElementById('hint');
+const usedPositions = []; // track where stuff already is
+
+// check if new position overlaps with existing ones
+function positionOverlaps(top, left) {
+    for (let pos of usedPositions) {
+        // check if too close (within 15% in any direction)
+        if (Math.abs(pos.top - top) < 15 && Math.abs(pos.left - left) < 20) {
+            return true;
+        }
+    }
+    return false;
+}
+
+// find a spot that doesn't overlap
+function findGoodPosition() {
+    let attempts = 0;
+    let top, left;
+    
+    // try to find a non-overlapping spot, give up after 50 tries
+    do {
+        top = Math.random() * 70; // 0-70% from top
+        left = Math.random() * 50; // 0-50% from left
+        attempts++;
+    } while (positionOverlaps(top, left) && attempts < 50);
+    
+    return { top, left };
+}
 
 // when you click the title
 titleLink.addEventListener('click', function(e) {
@@ -36,12 +63,14 @@ titleLink.addEventListener('click', function(e) {
         defDiv.className = 'definition';
         defDiv.innerHTML = '<p>' + definitions[clickCount] + '</p>';
         
-        // random position - keeps away from edges and title
-        const randomTop = Math.random() * 80; // 0-80% from top
-        const randomLeft = Math.random() * 60; // 0-60% from left
+        // get a position that doesn't overlap
+        const position = findGoodPosition();
         defDiv.style.position = 'absolute';
-        defDiv.style.top = randomTop + '%';
-        defDiv.style.left = randomLeft + '%';
+        defDiv.style.top = position.top + '%';
+        defDiv.style.left = position.left + '%';
+        
+        // remember this position
+        usedPositions.push(position);
         
         container.appendChild(defDiv);
         clickCount++;
